@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nyxzo__ Portfolio</title>
+
+<style>
+:root {
+  --main: #5205a0;
+  --bg: #0a0a0f;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: white;
+  overflow-x: hidden;
+}
+
+/* BACKGROUND */
+.bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top, #5205a0 0%, transparent 60%);
+  z-index: -1;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 100px 20px 60px;
+}
+
+.hero h1 {
+  font-size: 50px;
+  margin: 0;
+  text-shadow: 0 0 20px var(--main);
+}
+
+.hero p {
+  color: #aaa;
+  margin-top: 10px;
+}
+
+/* SOCIAL SLIDER */
+.social-slider {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+.slide {
+  display: none;
+}
+
+.slide a {
+  color: var(--main);
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.slide.active {
+  display: block;
+  animation: fade 0.8s ease;
+}
+
+@keyframes fade {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+/* DASHBOARD */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 20px;
+  padding: 40px;
+}
+
+/* CARDS */
+.card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(82,5,160,0.3);
+  border-radius: 15px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px var(--main);
+}
+
+/* SECTIONS */
+h2 {
+  color: var(--main);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Développeur Nyxzo__</h1>
+  <p>Discord Developer • Web Developer • Bot Creator</p>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard">
+
+  <!-- LEFT -->
+  <div class="card">
+    <h2>Profil</h2>
+    <p>👨‍💻 Nyxzo__</p>
+    <p>Discord & Web Developer</p>
+    <p>Créateur de bots Discord</p>
+  </div>
+
+  <!-- CENTER -->
+  <div class="card">
+    <h2>Projets</h2>
+
+    <h3>🤖 Bots Discord</h3>
+    <ul>
+      <li>Bot Modération</li>
+      <li>Bot Ticket</li>
+      <li>Bot Utility</li>
+    </ul>
+
+    <h3>🏠 Serveurs Discord</h3>
+    <ul>
+      <li>4 serveurs créés</li>
+      <li>Communautés gaming / dev</li>
+    </ul>
+
+    <h3>🌐 Sites Web</h3>
+    <ul>
+      <li>3 sites web HTML/CSS/JS</li>
+    </ul>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="card">
+    <h2>Skills</h2>
+    <p>HTML / CSS</p>
+    <p>JavaScript</p>
+    <p>Discord.js</p>
+    <p>Node.js</p>
+  </div>
+
+</div>
+
+<!-- SOCIAL SLIDER -->
+<div class="social-slider">
+
+  <div class="slide active">
+    <a href="https://discord.com/users/1336705004299616256">Discord</a>
+  </div>
+
+  <div class="slide">
+    <a href="https://www.youtube.com/">YouTube</a>
+  </div>
+
+  <div class="slide">
+    <a href="https://www.twitch.tv/naykoofficial">Twitch</a>
+  </div>
+
+  <div class="slide">
+    <a href="https://www.tiktok.com/@nyxzo__2">TikTok 1</a>
+  </div>
+
+  <div class="slide">
+    <a href="https://www.tiktok.com/@nyxzo__1">TikTok 2</a>
+  </div>
+
+</div>
+
+<script>
+let index = 0;
+const slides = document.querySelectorAll(".slide");
+
+setInterval(() => {
+  slides[index].classList.remove("active");
+  index = (index + 1) % slides.length;
+  slides[index].classList.add("active");
+}, 2500);
+</script>
+
+</body>
+</html>
