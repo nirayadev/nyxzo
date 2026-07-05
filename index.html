@@ -1,206 +1,999 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nyxzo__ Portfolio</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nyxzo__ • Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        /* ─────────────── ROOT ─────────────── */
+        :root {
+            --main: #5205a0;
+            --main-glow: rgba(82, 5, 160, 0.6);
+            --bg: #0a0a12;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --border: rgba(82, 5, 160, 0.25);
+            --text: #f0f0f0;
+            --muted: #a0a0b8;
+            --radius: 20px;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+        }
 
-<style>
-:root {
-  --main: #5205a0;
-  --bg: #0a0a0f;
-}
+        /* ─────────────── RESET ─────────────── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  color: white;
-  overflow-x: hidden;
-}
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            perspective: 1200px;
+        }
 
-/* BACKGROUND */
-.bg {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at top, #5205a0 0%, transparent 60%);
-  z-index: -1;
-}
+        /* ─────────────── 3D STARS BACKGROUND ─────────────── */
+        #stars-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
 
-/* HERO */
-.hero {
-  text-align: center;
-  padding: 100px 20px 60px;
-}
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(82, 5, 160, 0.25) 0%, transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(82, 5, 160, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(82, 5, 160, 0.05) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
 
-.hero h1 {
-  font-size: 50px;
-  margin: 0;
-  text-shadow: 0 0 20px var(--main);
-}
+        /* ─────────────── SCROLLBAR ─────────────── */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--main);
+            border-radius: 10px;
+        }
 
-.hero p {
-  color: #aaa;
-  margin-top: 10px;
-}
+        /* ─────────────── LAYOUT ─────────────── */
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 30px 30px 100px;
+        }
 
-/* SOCIAL SLIDER */
-.social-slider {
-  position: fixed;
-  bottom: 20px;
-  width: 100%;
-  text-align: center;
-}
+        /* ─────────────── HERO ─────────────── */
+        .hero {
+            text-align: center;
+            padding: 50px 20px 40px;
+            position: relative;
+        }
 
-.slide {
-  display: none;
-}
+        .hero-badge {
+            display: inline-block;
+            background: rgba(82, 5, 160, 0.2);
+            border: 1px solid rgba(82, 5, 160, 0.3);
+            border-radius: 50px;
+            padding: 6px 20px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin-bottom: 20px;
+            backdrop-filter: blur(4px);
+        }
 
-.slide a {
-  color: var(--main);
-  font-weight: bold;
-  text-decoration: none;
-  font-size: 18px;
-}
+        .hero h1 {
+            font-size: clamp(48px, 10vw, 82px);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #b07cf0 50%, var(--main) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(82, 5, 160, 0.25);
+            letter-spacing: -1px;
+            line-height: 1.1;
+            animation: glowPulse 4s ease-in-out infinite alternate;
+        }
 
-.slide.active {
-  display: block;
-  animation: fade 0.8s ease;
-}
+        @keyframes glowPulse {
+            0% {
+                filter: drop-shadow(0 0 20px rgba(82, 5, 160, 0.2));
+            }
+            100% {
+                filter: drop-shadow(0 0 50px rgba(82, 5, 160, 0.5));
+            }
+        }
 
-@keyframes fade {
-  from {opacity: 0; transform: translateY(10px);}
-  to {opacity: 1; transform: translateY(0);}
-}
+        .hero .subtitle {
+            font-size: 20px;
+            color: var(--muted);
+            margin-top: 12px;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
 
-/* DASHBOARD */
-.dashboard {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  gap: 20px;
-  padding: 40px;
-}
+        .hero .subtitle span {
+            color: var(--main);
+            font-weight: 600;
+        }
 
-/* CARDS */
-.card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(82,5,160,0.3);
-  border-radius: 15px;
-  padding: 20px;
-  backdrop-filter: blur(10px);
-  transition: 0.3s;
-}
+        .hero-3d-ring {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
 
-.card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 25px var(--main);
-}
+        .hero-3d-ring .pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(82, 5, 160, 0.2);
+            border-radius: 50px;
+            padding: 8px 22px;
+            font-size: 14px;
+            color: var(--muted);
+            backdrop-filter: blur(4px);
+            transition: 0.3s;
+            transform: rotateX(0deg) rotateY(0deg);
+        }
 
-/* SECTIONS */
-h2 {
-  color: var(--main);
-}
+        .hero-3d-ring .pill:hover {
+            border-color: var(--main);
+            color: #fff;
+            box-shadow: 0 0 30px rgba(82, 5, 160, 0.2);
+            transform: rotateX(4deg) rotateY(6deg) scale(1.05);
+        }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .dashboard {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
+        /* ─────────────── DASHBOARD GRID ─────────────── */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        /* ─────────────── 3D CARDS ─────────────── */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+                box-shadow 0.4s ease,
+                border-color 0.3s ease;
+            transform-style: preserve-3d;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
+                    rgba(82, 5, 160, 0.06) 0%,
+                    transparent 60%);
+            pointer-events: none;
+            transition: 0.2s;
+            opacity: 0;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            transform: rotateX(2deg) rotateY(3deg) translateY(-6px);
+            border-color: rgba(82, 5, 160, 0.6);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
+                0 0 40px rgba(82, 5, 160, 0.15);
+        }
+
+        .card h2 {
+            color: var(--main);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.3px;
+        }
+
+        .card h2 i {
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        .card h3 {
+            color: #d0d0e8;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 18px 0 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card ul li {
+            padding: 5px 0 5px 24px;
+            position: relative;
+            color: var(--muted);
+            font-size: 15px;
+            transition: 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .card ul li:last-child {
+            border-bottom: none;
+        }
+
+        .card ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--main);
+            font-weight: bold;
+        }
+
+        .card ul li:hover {
+            color: #fff;
+            padding-left: 30px;
+        }
+
+        .card ul li:hover::before {
+            color: #b07cf0;
+        }
+
+        /* ─────────────── SKILL TAGS ─────────────── */
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .skill-tag {
+            background: rgba(82, 5, 160, 0.15);
+            border: 1px solid rgba(82, 5, 160, 0.2);
+            border-radius: 50px;
+            padding: 6px 18px;
+            font-size: 13px;
+            color: #d0d0e8;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .skill-tag:hover {
+            background: rgba(82, 5, 160, 0.3);
+            border-color: var(--main);
+            color: #fff;
+            transform: scale(1.05) rotateX(2deg);
+            box-shadow: 0 0 25px rgba(82, 5, 160, 0.2);
+        }
+
+        /* ─────────────── STATS ─────────────── */
+        .stat-row {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, #fff, #b07cf0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-item .label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ─────────────── PROFILE CARD ─────────────── */
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--main), #8b3fcf);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 auto 16px;
+            box-shadow: 0 0 40px rgba(82, 5, 160, 0.3);
+            transition: 0.4s;
+            transform: rotateY(0deg);
+        }
+
+        .card:hover .profile-avatar {
+            transform: rotateY(12deg) scale(1.04);
+            box-shadow: 0 0 60px rgba(82, 5, 160, 0.5);
+        }
+
+        .profile-name {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .profile-divider {
+            width: 40px;
+            height: 3px;
+            background: var(--main);
+            margin: 14px auto;
+            border-radius: 10px;
+        }
+
+        .profile-detail {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .profile-detail i {
+            color: var(--main);
+            width: 20px;
+            text-align: center;
+        }
+
+        /* ─────────────── SOCIAL SLIDER ─────────────── */
+        .social-slider {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: rgba(10, 10, 18, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(82, 5, 160, 0.2);
+            border-radius: 60px;
+            padding: 12px 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 10px 60px rgba(0, 0, 0, 0.6);
+            min-width: 200px;
+            justify-content: center;
+        }
+
+        .social-slider .label {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .social-slider .slide-container {
+            position: relative;
+            width: 140px;
+            height: 32px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .social-slider .slide {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            pointer-events: none;
+        }
+
+        .social-slider .slide.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .social-slider .slide a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            padding: 4px 10px;
+            border-radius: 30px;
+        }
+
+        .social-slider .slide a i {
+            font-size: 18px;
+            color: var(--main);
+            transition: 0.2s;
+        }
+
+        .social-slider .slide a:hover {
+            color: var(--main);
+        }
+
+        .social-slider .slide a:hover i {
+            color: #b07cf0;
+            transform: scale(1.2);
+        }
+
+        .social-slider .dots {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .social-slider .dots .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .social-slider .dots .dot.active {
+            background: var(--main);
+            width: 18px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(82, 5, 160, 0.4);
+        }
+
+        /* ─────────────── 3D FLOATING ORB ─────────────── */
+        .orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(82, 5, 160, 0.15), transparent 70%);
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+            animation: orbFloat 12s ease-in-out infinite alternate;
+        }
+
+        .orb-1 {
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            bottom: -100px;
+            left: -100px;
+            animation-delay: -4s;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle at 30% 30%, rgba(130, 40, 220, 0.1), transparent 70%);
+        }
+
+        @keyframes orbFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -40px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 30px) scale(0.9);
+            }
+            100% {
+                transform: translate(10px, -20px) scale(1.05);
+            }
+        }
+
+        /* ─────────────── RESPONSIVE ─────────────── */
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr 1fr;
+            }
+            .dashboard .card:last-child {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .wrapper {
+                padding: 20px 16px 120px;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            .dashboard .card:last-child {
+                grid-column: span 1;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .social-slider {
+                flex-wrap: wrap;
+                padding: 12px 20px;
+                border-radius: 30px;
+                bottom: 16px;
+                width: calc(100% - 32px);
+                gap: 10px;
+            }
+
+            .social-slider .slide-container {
+                width: 120px;
+                height: 28px;
+            }
+
+            .social-slider .slide a {
+                font-size: 14px;
+            }
+
+            .social-slider .label {
+                font-size: 11px;
+            }
+
+            .card {
+                padding: 20px 16px;
+            }
+
+            .stat-row {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            .hero .subtitle {
+                font-size: 16px;
+            }
+            .social-slider .slide-container {
+                width: 100px;
+            }
+            .social-slider .slide a {
+                font-size: 13px;
+            }
+            .social-slider .dots .dot {
+                width: 5px;
+                height: 5px;
+            }
+            .social-slider .dots .dot.active {
+                width: 14px;
+            }
+        }
+
+        /* ─────────────── UTILITY ─────────────── */
+        .mt-1 {
+            margin-top: 6px;
+        }
+        .mt-2 {
+            margin-top: 14px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .gap-1 {
+            gap: 6px;
+        }
+
+        /* ─────────────── SMOOTH SCROLL ─────────────── */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="bg"></div>
+    <!-- ─── 3D ORBS ─── -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
 
-<!-- HERO -->
-<div class="hero">
-  <h1>Développeur Nyxzo__</h1>
-  <p>Discord Developer • Web Developer • Bot Creator</p>
-</div>
+    <!-- ─── GRADIENT ─── -->
+    <div class="bg-gradient"></div>
 
-<!-- DASHBOARD -->
-<div class="dashboard">
+    <!-- ─── STARS CANVAS ─── -->
+    <canvas id="stars-canvas"></canvas>
 
-  <!-- LEFT -->
-  <div class="card">
-    <h2>Profil</h2>
-    <p>👨‍💻 Nyxzo__</p>
-    <p>Discord & Web Developer</p>
-    <p>Créateur de bots Discord</p>
-  </div>
+    <!-- ─── WRAPPER ─── -->
+    <div class="wrapper">
 
-  <!-- CENTER -->
-  <div class="card">
-    <h2>Projets</h2>
+        <!-- ─── HERO ─── -->
+        <section class="hero">
+            <div class="hero-badge">
+                <i class="fas fa-code" style="margin-right:8px;"></i> Portfolio 2026
+            </div>
+            <h1>Développeur Nyxzo__</h1>
+            <p class="subtitle">
+                <span>Discord</span> Developer &bull; <span>Web</span> Developer &bull; <span>Bot</span> Creator
+            </p>
+            <div class="hero-3d-ring">
+                <span class="pill"><i class="fab fa-discord" style="color:var(--main);"></i> 1.2k+</span>
+                <span class="pill"><i class="fas fa-robot" style="color:var(--main);"></i> 8 bots</span>
+                <span class="pill"><i class="fas fa-server" style="color:var(--main);"></i> 4 servers</span>
+                <span class="pill"><i class="fas fa-globe" style="color:var(--main);"></i> 3 sites</span>
+            </div>
+        </section>
 
-    <h3>🤖 Bots Discord</h3>
-    <ul>
-      <li>Bot Modération</li>
-      <li>Bot Ticket</li>
-      <li>Bot Utility</li>
-    </ul>
+        <!-- ─── DASHBOARD ─── -->
+        <div class="dashboard">
 
-    <h3>🏠 Serveurs Discord</h3>
-    <ul>
-      <li>4 serveurs créés</li>
-      <li>Communautés gaming / dev</li>
-    </ul>
+            <!-- ─── LEFT : PROFIL ─── -->
+            <div class="card" data-tilt>
+                <div class="profile-avatar">N</div>
+                <div class="profile-name">Nyxzo__</div>
+                <div class="profile-role">Full‑Stack Developer</div>
+                <div class="profile-divider"></div>
 
-    <h3>🌐 Sites Web</h3>
-    <ul>
-      <li>3 sites web HTML/CSS/JS</li>
-    </ul>
-  </div>
+                <div class="profile-detail">
+                    <i class="fab fa-discord"></i> Nyxzo__#0001
+                </div>
+                <div class="profile-detail">
+                    <i class="fas fa-map-pin"></i> France
+                </div>
+                <div class="profile-detail">
+                    <i class="fas fa-clock"></i> Actif 24/7
+                </div>
+                <div class="profile-detail">
+                    <i class="fas fa-code"></i> 3+ ans d'expérience
+                </div>
 
-  <!-- RIGHT -->
-  <div class="card">
-    <h2>Skills</h2>
-    <p>HTML / CSS</p>
-    <p>JavaScript</p>
-    <p>Discord.js</p>
-    <p>Node.js</p>
-  </div>
+                <div class="stat-row">
+                    <div class="stat-item">
+                        <div class="number">12</div>
+                        <div class="label">Projets</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number">8</div>
+                        <div class="label">Bots</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number">4</div>
+                        <div class="label">Serveurs</div>
+                    </div>
+                </div>
+            </div>
 
-</div>
+            <!-- ─── CENTER : PROJETS ─── -->
+            <div class="card" data-tilt>
+                <h2><i class="fas fa-rocket"></i> Projets</h2>
 
-<!-- SOCIAL SLIDER -->
-<div class="social-slider">
+                <h3><i class="fab fa-discord" style="color:var(--main);"></i> Bots Discord</h3>
+                <ul>
+                    <li>Bot Modération <span style="color:var(--muted);font-size:13px;">• 150+ serveurs</span></li>
+                    <li>Bot Ticket <span style="color:var(--muted);font-size:13px;">• Système avancé</span></li>
+                    <li>Bot Utility <span style="color:var(--muted);font-size:13px;">• Multi‑fonctions</span></li>
+                    <li>Bot Music <span style="color:var(--muted);font-size:13px;">• YouTube / Spotify</span></li>
+                </ul>
 
-  <div class="slide active">
-    <a href="https://discord.com/users/1336705004299616256">Discord</a>
-  </div>
+                <h3><i class="fas fa-server" style="color:var(--main);"></i> Serveurs Discord</h3>
+                <ul>
+                    <li>Serveur Gaming <span style="color:var(--muted);font-size:13px;">• 600+ membres</span></li>
+                    <li>Serveur Dev <span style="color:var(--muted);font-size:13px;">• 200+ devs</span></li>
+                    <li>Serveur Communauté <span style="color:var(--muted);font-size:13px;">• 350+ membres</span></li>
+                    <li>Serveur Privé <span style="color:var(--muted);font-size:13px;">• Équipe</span></li>
+                </ul>
 
-  <div class="slide">
-    <a href="https://www.youtube.com/">YouTube</a>
-  </div>
+                <h3><i class="fas fa-globe" style="color:var(--main);"></i> Sites Web</h3>
+                <ul>
+                    <li>Portfolio Nyxzo__ <span style="color:var(--muted);font-size:13px;">• React / Three.js</span></li>
+                    <li>Dashboard Bots <span style="color:var(--muted);font-size:13px;">• Vue.js</span></li>
+                    <li>Landing Page <span style="color:var(--muted);font-size:13px;">• HTML / CSS / JS</span></li>
+                </ul>
+            </div>
 
-  <div class="slide">
-    <a href="https://www.twitch.tv/naykoofficial">Twitch</a>
-  </div>
+            <!-- ─── RIGHT : SKILLS ─── -->
+            <div class="card" data-tilt>
+                <h2><i class="fas fa-brain"></i> Skills</h2>
 
-  <div class="slide">
-    <a href="https://www.tiktok.com/@nyxzo__2">TikTok 1</a>
-  </div>
+                <div style="margin-bottom:16px;">
+                    <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--muted);">
+                        <span>HTML / CSS</span>
+                        <span>95%</span>
+                    </div>
+                    <div style="width:100%;height:6px;background:rgba(255,255,255,0.06);border-radius:10px;margin-top:4px;overflow:hidden;">
+                        <div style="width:95%;height:100%;background:linear-gradient(90deg,var(--main),#b07cf0);border-radius:10px;transition:0.8s;"></div>
+                    </div>
+                </div>
 
-  <div class="slide">
-    <a href="https://www.tiktok.com/@nyxzo__1">TikTok 2</a>
-  </div>
+                <div style="margin-bottom:16px;">
+                    <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--muted);">
+                        <span>JavaScript</span>
+                        <span>88%</span>
+                    </div>
+                    <div style="width:100%;height:6px;background:rgba(255,255,255,0.06);border-radius:10px;margin-top:4px;overflow:hidden;">
+                        <div style="width:88%;height:100%;background:linear-gradient(90deg,var(--main),#b07cf0);border-radius:10px;transition:0.8s;"></div>
+                    </div>
+                </div>
 
-</div>
+                <div style="margin-bottom:16px;">
+                    <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--muted);">
+                        <span>Discord.js</span>
+                        <span>92%</span>
+                    </div>
+                    <div style="width:100%;height:6px;background:rgba(255,255,255,0.06);border-radius:10px;margin-top:4px;overflow:hidden;">
+                        <div style="width:92%;height:100%;background:linear-gradient(90deg,var(--main),#b07cf0);border-radius:10px;transition:0.8s;"></div>
+                    </div>
+                </div>
 
-<script>
-let index = 0;
-const slides = document.querySelectorAll(".slide");
+                <div style="margin-bottom:16px;">
+                    <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--muted);">
+                        <span>Node.js</span>
+                        <span>80%</span>
+                    </div>
+                    <div style="width:100%;height:6px;background:rgba(255,255,255,0.06);border-radius:10px;margin-top:4px;overflow:hidden;">
+                        <div style="width:80%;height:100%;background:linear-gradient(90deg,var(--main),#b07cf0);border-radius:10px;transition:0.8s;"></div>
+                    </div>
+                </div>
 
-setInterval(() => {
-  slides[index].classList.remove("active");
-  index = (index + 1) % slides.length;
-  slides[index].classList.add("active");
-}, 2500);
-</script>
+                <div style="margin-bottom:8px;">
+                    <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--muted);">
+                        <span>React / Vue</span>
+                        <span>70%</span>
+                    </div>
+                    <div style="width:100%;height:6px;background:rgba(255,255,255,0.06);border-radius:10px;margin-top:4px;overflow:hidden;">
+                        <div style="width:70%;height:100%;background:linear-gradient(90deg,var(--main),#b07cf0);border-radius:10px;transition:0.8s;"></div>
+                    </div>
+                </div>
+
+                <div class="skill-tags mt-2">
+                    <span class="skill-tag">#Git</span>
+                    <span class="skill-tag">#MongoDB</span>
+                    <span class="skill-tag">#Express</span>
+                    <span class="skill-tag">#EJS</span>
+                    <span class="skill-tag">#Three.js</span>
+                </div>
+            </div>
+
+        </div>
+        <!-- ─── FIN DASHBOARD ─── -->
+
+    </div>
+    <!-- ─── FIN WRAPPER ─── -->
+
+    <!-- ─── SOCIAL SLIDER ─── -->
+    <div class="social-slider">
+        <span class="label"><i class="fas fa-share-alt"></i></span>
+
+        <div class="slide-container">
+            <!-- Discord -->
+            <div class="slide active">
+                <a href="https://discord.com/users/1336705004299616256" target="_blank">
+                    <i class="fab fa-discord"></i> Discord
+                </a>
+            </div>
+            <!-- YouTube -->
+            <div class="slide">
+                <a href="https://www.youtube.com/" target="_blank">
+                    <i class="fab fa-youtube"></i> YouTube
+                </a>
+            </div>
+            <!-- Twitch -->
+            <div class="slide">
+                <a href="https://www.twitch.tv/naykoofficial" target="_blank">
+                    <i class="fab fa-twitch"></i> Twitch
+                </a>
+            </div>
+            <!-- TikTok 1 -->
+            <div class="slide">
+                <a href="https://www.tiktok.com/@nyxzo__2" target="_blank">
+                    <i class="fab fa-tiktok"></i> TikTok 1
+                </a>
+            </div>
+            <!-- TikTok 2 -->
+            <div class="slide">
+                <a href="https://www.tiktok.com/@nyxzo__1" target="_blank">
+                    <i class="fab fa-tiktok"></i> TikTok 2
+                </a>
+            </div>
+        </div>
+
+        <div class="dots">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+            <span class="dot" data-index="3"></span>
+            <span class="dot" data-index="4"></span>
+        </div>
+    </div>
+
+    <!-- ─── SCRIPTS ─── -->
+
+    <!-- 1) STARS CANVAS (3D perspective) -->
+    <script>
+        (function stars() {
+            const canvas = document.getElementById('stars-canvas');
+            const ctx = canvas.getContext('2d');
+            let W, H;
+            const stars = [];
+            const COUNT = 300;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            for (let i = 0; i < COUNT; i++) {
+                stars.push({
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    r: Math.random() * 2 + 0.5,
+                    speed: 0.2 + Math.random() * 0.6,
+                    angle: Math.random() * Math.PI * 2,
+                    drift: 0.003 + Math.random() * 0.01,
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+
+                for (const s of stars) {
+                    s.angle += s.drift;
+                    s.x += Math.sin(s.angle) * s.speed * 0.15;
+                    s.y += Math.cos(s.angle * 0.7) * s.speed * 0.1;
+
+                    // wrap
+                    if (s.x < -10) s.x = W + 10;
+                    if (s.x > W + 10) s.x = -10;
+                    if (s.y < -10) s.y = H + 10;
+                    if (s.y > H + 10) s.y = -10;
+
+                    const brightness = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(s.angle * 2));
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(180, 150, 255, ${brightness * 0.7})`;
+                    ctx.fill();
+
+                    // tiny glow
+                    if (s.r > 1.2) {
+                        ctx.shadowColor = 'rgba(82,5,160,0.15)';
+                        ctx.shadowBlur = 10;
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    }
+                }
+
+                requestAnimationFrame(draw);
+            }
+            draw();
+        })();
+    </script>
+
+    <!-- 2) SOCIAL SLIDER avec dots cliquables -->
+    <script>
+        (function slider() {
+            const slides = document.querySelectorAll('.social-slider .slide');
+            const dots = document.querySelectorAll('.social-slider .dot');
+            let current = 0;
+            let interval;
+
+            function goTo(index) {
+                slides.forEach((s, i) => {
+                    s.classList.toggle('active', i === index);
+                });
+                dots.forEach((d, i) => {
+                    d.classList.toggle('active', i === index);
+                });
+                current = index;
+            }
+
+            function next() {
+                goTo((current + 1) % slides.length);
+            }
+
+            function startInterval() {
+                if (interval) clearInterval(interval);
+                interval = setInterval(next, 2800);
+            }
+
+            // dots click
+            dots.forEach((dot, i) => {
+                dot.addEventListener('click', () => {
+                    goTo(i);
+                    startInterval(); // reset timer
+                });
+            });
+
+            // hover pause
+            const sliderEl = document.querySelector('.social-slider');
+            sliderEl.addEventListener('mouseenter', () => {
+                if (interval) clearInterval(interval);
+            });
+            sliderEl.addEventListener('mouseleave', startInterval);
+
+            startInterval();
+        })();
+    </script>
+
+    <!-- 3) 3D CARD TILT (souris) -->
+    <script>
+        (function tilt() {
+            const cards = document.querySelectorAll('.card[data-tilt]');
+
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const cx = rect.width / 2;
+                    const cy = rect.height / 2;
+                    const rotX = ((y - cy) / cy) * -4;
+                    const rotY = ((x - cx) / cx) * 4;
+
+                    card.style.transform =
+                        `rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-6px)`;
+
+                    // Update gradient position
+                    card.style.setProperty('--mx', (x / rect.width * 100) + '%');
+                    card.style.setProperty('--my', (y / rect.height * 100) + '%');
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0)';
+                });
+            });
+        })();
+    </script>
 
 </body>
 </html>
